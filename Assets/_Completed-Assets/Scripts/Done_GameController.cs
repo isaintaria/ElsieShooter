@@ -4,26 +4,47 @@ using System.Collections;
 
 public class Done_GameController : MonoBehaviour
 {
+    
 	public GameObject[] hazards;
 	public Vector3 spawnValues;
 	public int hazardCount;
 	public float spawnWait;
 	public float startWait;
 	public float waveWait;
+    
 	
 	public GUIText scoreText;
 	public GUIText restartText;
 	public GUIText gameOverText;
-    public GUIText lifeText;
+    public GUIText bombMaxText;
+    public GUIText currentBombText;
+    
+
+    public int bombMaxCount;
+    public int startBombCount;
+    
 	
 	private bool gameOver;
 	private bool restart;
 	private int score;
+
+    private int bombCount;
    
     public int life;
-   
 
+    public int BombCount
+    {
+        get
+        {
+            return bombCount;
+        }
 
+        set
+        {
+            bombCount = value;
+            currentBombText.text = bombCount.ToString();
+        }
+    }
 
     void Start ()
 	{
@@ -31,17 +52,15 @@ public class Done_GameController : MonoBehaviour
 		restart = false;
 		restartText.text = "";
 		gameOverText.text = "";
-        lifeText.text = GetLifeText(life);
+        bombCount = startBombCount;       
 		score = 0;
 		UpdateScore ();
+        bombMaxText.text = bombMaxCount.ToString();
+        currentBombText.text = bombCount.ToString();
 		StartCoroutine (SpawnWaves ());
 	}
 
-    string GetLifeText( int _life )
-    {
-        return string.Format("Life : {0}", _life);
-    }
-	
+   	
 	void Update ()
 	{
 		if (restart)

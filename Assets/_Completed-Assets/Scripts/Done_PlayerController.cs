@@ -15,9 +15,16 @@ public class Done_PlayerController : MonoBehaviour
 
 	public GameObject shot;
 	public Transform shotSpawn;
-	public float fireRate;
+    public GameObject bombEffect;
+    public Transform bombSpawn;
+    public float fireRate;
+    public float bombCoolTime;
 	 
 	private float nextFire;
+    private float nextBomb;
+
+
+    private Done_GameController gameController;
 	
 	void Update ()
 	{
@@ -27,7 +34,32 @@ public class Done_PlayerController : MonoBehaviour
 			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
 			GetComponent<AudioSource>().Play ();
 		}
+        else if( Input.GetButton("Fire2") && Time.time > nextBomb )
+        {
+            if (gameController.BombCount <= 0)
+                return;
+            gameController.BombCount--;
+            nextBomb = Time.time + bombCoolTime;
+            Instantiate(bombEffect, bombSpawn.position, bombSpawn.rotation);            
+            GetComponent<AudioSource>().Play();
+            Bomb_Action();
+        }
 	}
+
+    void Start()
+    {
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<Done_GameController>();
+    }
+
+    void Bomb_Action()
+    {
+        GameObject[] gos = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach( GameObject obj in gos )
+        {
+            Destroy(obj);
+        }
+        
+    }
 
 	void FixedUpdate ()
 	{
