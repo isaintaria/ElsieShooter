@@ -75,4 +75,4 @@ public class TutorialInfo : MonoBehaviour
 		showAtStart = showAtStartToggle.isOn;
 		PlayerPrefs.SetInt(showAtStartPrefsKey, showAtStart ? 1 : 0);
 	}
-}
+}   

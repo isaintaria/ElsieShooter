@@ -7,4 +7,4 @@ public class Done_DestroyByBoundary : MonoBehaviour
 	{
 		Destroy(other.gameObject);
 	}
-}
+}   

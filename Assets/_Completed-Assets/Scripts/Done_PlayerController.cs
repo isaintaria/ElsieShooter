@@ -23,10 +23,22 @@ public class Done_PlayerController : MonoBehaviour
 	private float nextFire;
     private float nextBomb;
 
+    private bool isMoveable;
+    public bool IsMoveable
+    {
+        get
+        {
+            return isMoveable;
+        }
 
+        set
+        {
+            isMoveable = value;
+        }
+    }
     private Done_GameController gameController;
-	
-	void Update ()
+
+    void Update ()
 	{
 		if (Input.GetButton("Fire1") && Time.time > nextFire) 
 		{
@@ -49,33 +61,49 @@ public class Done_PlayerController : MonoBehaviour
     void Start()
     {
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<Done_GameController>();
+        IsMoveable = true;
     }
 
     void Bomb_Action()
     {
         GameObject[] gos = GameObject.FindGameObjectsWithTag("Enemy");
+       
         foreach( GameObject obj in gos )
         {
-            Destroy(obj);
+            var test = obj.GetComponent<Done_DestroyByContact>();
+            if( test != null )
+            {
+                gameController.AddScore(test.scoreValue);
+                Destroy(obj);
+            }                
+            
         }
         
+    }  
+    public void MoveUp()
+    {
+        Vector3 up = new Vector3(0, 0, 1.0f);
+        GetComponent<Rigidbody>().velocity = up * 5.0f;
     }
 
 	void FixedUpdate ()
 	{
-		float moveHorizontal = Input.GetAxis ("Horizontal");
-		float moveVertical = Input.GetAxis ("Vertical");
+        if( IsMoveable )
+        {
+            float moveHorizontal = Input.GetAxis("Horizontal");
+            float moveVertical = Input.GetAxis("Vertical");
 
-		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
-		GetComponent<Rigidbody>().velocity = movement * speed;
+            Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+            
+            GetComponent<Rigidbody>().velocity = movement * speed;
+            GetComponent<Rigidbody>().position = new Vector3
+            (
+                Mathf.Clamp(GetComponent<Rigidbody>().position.x, boundary.xMin, boundary.xMax),
+                0.0f,
+                Mathf.Clamp(GetComponent<Rigidbody>().position.z, boundary.zMin, boundary.zMax)
+            );
+            GetComponent<Rigidbody>().rotation = Quaternion.Euler(0.0f, 0.0f, GetComponent<Rigidbody>().velocity.x * -tilt);
+        }
 		
-		GetComponent<Rigidbody>().position = new Vector3
-		(
-			Mathf.Clamp (GetComponent<Rigidbody>().position.x, boundary.xMin, boundary.xMax), 
-			0.0f, 
-			Mathf.Clamp (GetComponent<Rigidbody>().position.z, boundary.zMin, boundary.zMax)
-		);
-		
-		GetComponent<Rigidbody>().rotation = Quaternion.Euler (0.0f, 0.0f, GetComponent<Rigidbody>().velocity.x * -tilt);
 	}
 }

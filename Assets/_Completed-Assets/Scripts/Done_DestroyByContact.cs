@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Done_DestroyByContact : MonoBehaviour
 {
@@ -9,9 +10,9 @@ public class Done_DestroyByContact : MonoBehaviour
 	public int scoreValue;
     private int hp;
 	private Done_GameController gameController;
-
+    
 	void Start ()
-	{
+	{        
         hp = objectHp;
 		GameObject gameControllerObject = GameObject.FindGameObjectWithTag ("GameController");
 		if (gameControllerObject != null)
@@ -30,34 +31,56 @@ public class Done_DestroyByContact : MonoBehaviour
 		{
 			return;
 		}
-		if( tag == "Enemy" && other.tag == "Beam")
+		else if( tag == "Enemy" && other.tag == "Beam")
         {
-            if( hp > 1 )
+            KillEnemyByPlayerMissile(other);   
+        }
+        else if ( tag == "Item" && other.tag == "Player")
+        {
+            Debug.Log(gameObject.name);
+            gameController.BombCount++;
+            gameController.GetComponents<AudioSource>()[1].Play();          
+            Destroy(gameObject);
+        }
+
+		if (other.tag == "Player" && tag == "Enemy")
+		{     
+            if( !gameController.IsPlayerDead )
             {
-                hp--;
-                Destroy(other.gameObject);
-                return;
-            }
-            if (explosion != null)
-            {
-                Instantiate(explosion, transform.position, transform.rotation);
-                gameController.AddScore(scoreValue);
+                Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
+                //gameController.GameOver();
+                //gameController.AddScore(scoreValue);
+                gameController.PlayerDead();
                 Destroy(other.gameObject);
                 Destroy(gameObject);
             }
-                          
-        }
-
-		if (other.tag == "Player")
-		{
-			Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
-			gameController.GameOver();
-
-            gameController.AddScore(scoreValue);
-            Destroy(other.gameObject);
-            Destroy(gameObject);
+			
         }
 		
 		
 	}
+
+    private void KillEnemyByPlayerMissile(Collider other)
+    {
+        if (hp > 1)
+        {
+            hp--;
+            Destroy(other.gameObject);
+            return;
+        }
+        //폭발 시킨다.
+        if (explosion != null)
+        {
+            if( gameObject.name.Contains("Green") )
+            {
+                Debug.Log("상자 생성");
+                Instantiate(gameController.itemObject, transform.position, transform.rotation);
+            }            
+            Instantiate(explosion, transform.position, transform.rotation);
+            
+            gameController.AddScore(scoreValue);
+            Destroy(other.gameObject);
+            Destroy(gameObject);
+        }
+    }
 }
