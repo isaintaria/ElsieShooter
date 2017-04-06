@@ -8,6 +8,7 @@ public class Done_GameController : MonoBehaviour
 {
     
 	public GameObject[] hazards;
+    public GameObject[] backgroundHazards;
     public GameObject playerObject;
     public GameObject playerSpawnPosition;
     public GameObject itemObject;
@@ -88,11 +89,37 @@ public class Done_GameController : MonoBehaviour
         bombMaxText.text = bombMaxCount.ToString();
         currentBombText.text = bombCount.ToString();
 		StartCoroutine (SpawnWaves ());
+        StartCoroutine(SpawnBackgroundLeft());
+        StartCoroutine(SpawnBackgroundRight());
         StartCoroutine( TimerRoutine() );
         respawnPlayer();
         
 	}
 
+    private IEnumerator SpawnBackgroundRight()
+    {
+        while (true)
+        {
+            GameObject hazard = backgroundHazards[UnityEngine.Random.Range(0, 3)];            
+            Vector3 spawnPosition = new Vector3(UnityEngine.Random.Range(spawnValues.x+2f, spawnValues.x+6f), spawnValues.y, spawnValues.z);
+            Quaternion spawnRotation = Quaternion.identity;
+            Instantiate(hazard, spawnPosition, spawnRotation);
+            yield return new WaitForSeconds(2f);
+        }
+    }
+
+    private IEnumerator SpawnBackgroundLeft()
+    {
+        while(true)
+        {
+            GameObject hazard = backgroundHazards[UnityEngine.Random.Range(0, 3)];
+           
+            Vector3 spawnPosition = new Vector3(UnityEngine.Random.Range(-spawnValues.x - 6f, -spawnValues.x-2f), spawnValues.y, spawnValues.z);
+            Quaternion spawnRotation = Quaternion.identity;
+            Instantiate(hazard, spawnPosition, spawnRotation);
+            yield return new WaitForSeconds(2f);
+        }        
+    }
 
     private IEnumerator TimerRoutine()
     {
