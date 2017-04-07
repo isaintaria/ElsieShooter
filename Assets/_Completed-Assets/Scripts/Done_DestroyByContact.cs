@@ -10,9 +10,11 @@ public class Done_DestroyByContact : MonoBehaviour
 	public int scoreValue;
     private int hp;
 	private Done_GameController gameController;
-    
-	void Start ()
-	{        
+    private EffectManager effectManager;
+
+    void Start ()
+	{
+        effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
         hp = objectHp;
 		GameObject gameControllerObject = GameObject.FindGameObjectWithTag ("GameController");
 		if (gameControllerObject != null)
@@ -77,7 +79,7 @@ public class Done_DestroyByContact : MonoBehaviour
                 Instantiate(gameController.itemObject, transform.position, transform.rotation);
             }            
             Instantiate(explosion, transform.position, transform.rotation);
-            
+            effectManager.FireEnemyDeadByPlayerBeamEffect();
             gameController.AddScore(scoreValue);
             Destroy(other.gameObject);
             Destroy(gameObject);

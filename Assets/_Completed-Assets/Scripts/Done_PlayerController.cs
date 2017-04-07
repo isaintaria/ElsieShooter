@@ -24,6 +24,8 @@ public class Done_PlayerController : MonoBehaviour
     private float nextBomb;
 
     private bool isMoveable;
+
+    EffectManager effectManager;
     public bool IsMoveable
     {
         get
@@ -44,7 +46,7 @@ public class Done_PlayerController : MonoBehaviour
 		{
 			nextFire = Time.time + fireRate;
 			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-			GetComponent<AudioSource>().Play ();
+            effectManager.FirePlayerBeamEffect();
 		}
         else if( Input.GetButton("Fire2") && Time.time > nextBomb )
         {
@@ -52,14 +54,15 @@ public class Done_PlayerController : MonoBehaviour
                 return;
             gameController.BombCount--;
             nextBomb = Time.time + bombCoolTime;
-            Instantiate(bombEffect, bombSpawn.position, bombSpawn.rotation);            
-            GetComponent<AudioSource>().Play();
+            Instantiate(bombEffect, bombSpawn.position, bombSpawn.rotation);
+            effectManager.FirePlayerBombExplosionEffect();
             Bomb_Action();
         }
 	}
 
     void Start()
     {
+        effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<Done_GameController>();
         IsMoveable = true;
     }

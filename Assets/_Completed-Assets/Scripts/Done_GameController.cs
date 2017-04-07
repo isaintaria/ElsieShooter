@@ -40,6 +40,8 @@ public class Done_GameController : MonoBehaviour
     private bool timeOver;
     private GameObject player;
 
+    private static float speedWeight = 1.0f;
+
     private int bombCount;
     private int time;
     public int BombCount
@@ -68,6 +70,19 @@ public class Done_GameController : MonoBehaviour
         set
         {
             isPlayerDead = value;
+        }
+    }
+
+    public static float SpeedWeight
+    {
+        get
+        {
+            return speedWeight;
+        }
+
+        set
+        {
+            speedWeight = value;
         }
     }
 
@@ -113,7 +128,7 @@ public class Done_GameController : MonoBehaviour
         while(true)
         {
             GameObject hazard = backgroundHazards[UnityEngine.Random.Range(0, 3)];
-           
+            
             Vector3 spawnPosition = new Vector3(UnityEngine.Random.Range(-spawnValues.x - 6f, -spawnValues.x-2f), spawnValues.y, spawnValues.z);
             Quaternion spawnRotation = Quaternion.identity;
             Instantiate(hazard, spawnPosition, spawnRotation);
@@ -181,13 +196,14 @@ public class Done_GameController : MonoBehaviour
 		{
             Debug.Log("웨이브 시작");
             var ds = levelTable.Datas[i];
+            speedWeight = ds.speed;
             // 레벨테이블의 아이템의 전체 수가 한번의 사이클
             // spawnWait은 15 나누기 해당 레벨의 모든 적기의 숫자로 정의한다
             List<int> hList = SetHazardWave(ds);             
             for (int j = 0; j < hList.Count; j++)
 			{
                 //GameObject hazard = hazards [UnityEngine.Random.Range (0, hazards.Length)];
-                GameObject hazard = hazards[hList[j]];
+                GameObject hazard = hazards[hList[j]];                
                 Vector3 spawnPosition = new Vector3 (UnityEngine.Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
 				Quaternion spawnRotation = Quaternion.identity;
 				Instantiate (hazard, spawnPosition, spawnRotation);

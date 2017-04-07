@@ -7,16 +7,17 @@ public class Done_WeaponController : MonoBehaviour
 	public Transform shotSpawn;
 	public float fireRate;
 	public float delay;
-
+    EffectManager effectManager;
 	void Start ()
 	{
-		InvokeRepeating ("Fire", delay, fireRate);
+        effectManager = GameObject.Find("EffectManager").GetComponent<EffectManager>();
+        InvokeRepeating ("Fire", delay, fireRate);
 	}
 
 	void Fire ()
 	{
 		Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-		GetComponent<AudioSource>().Play();
+        GetComponent<AudioSource>().Play();
         
 	}
 }
