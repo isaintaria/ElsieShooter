@@ -11,12 +11,13 @@ public class Done_PlayerController : MonoBehaviour
 {
 	public float speed;
 	public float tilt;
-	public Done_Boundary boundary;
 
+	public Done_Boundary boundary;
 	public GameObject shot;
 	public Transform shotSpawn;
     public GameObject bombEffect;
     public Transform bombSpawn;
+
     public float fireRate;
     public float bombCoolTime;
 	 
@@ -55,7 +56,7 @@ public class Done_PlayerController : MonoBehaviour
             gameController.BombCount--;
             nextBomb = Time.time + bombCoolTime;
             Instantiate(bombEffect, bombSpawn.position, bombSpawn.rotation);
-            effectManager.FirePlayerBombExplosionEffect();
+            
             Bomb_Action();
         }
 	}
@@ -78,10 +79,11 @@ public class Done_PlayerController : MonoBehaviour
             {
                 gameController.AddScore(test.scoreValue);
                 Destroy(obj);
-            }                
+            }               
             
         }
-        
+        effectManager.FirePlayerBombExplosionEffect();
+
     }  
     public void MoveUp()
     {

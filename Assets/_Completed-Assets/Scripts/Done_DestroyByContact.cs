@@ -41,8 +41,9 @@ public class Done_DestroyByContact : MonoBehaviour
         {
             Debug.Log(gameObject.name);
             gameController.BombCount++;
-            gameController.GetComponents<AudioSource>()[1].Play();          
+            effectManager.FireGetBombEffect();      
             Destroy(gameObject);
+
         }
 
 		if (other.tag == "Player" && tag == "Enemy")
@@ -50,8 +51,7 @@ public class Done_DestroyByContact : MonoBehaviour
             if( !gameController.IsPlayerDead )
             {
                 Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
-                //gameController.GameOver();
-                //gameController.AddScore(scoreValue);
+                effectManager.FirePlayerDeadEffect();
                 gameController.PlayerDead();
                 Destroy(other.gameObject);
                 Destroy(gameObject);
@@ -79,10 +79,11 @@ public class Done_DestroyByContact : MonoBehaviour
                 Instantiate(gameController.itemObject, transform.position, transform.rotation);
             }            
             Instantiate(explosion, transform.position, transform.rotation);
-            effectManager.FireEnemyDeadByPlayerBeamEffect();
+          
             gameController.AddScore(scoreValue);
             Destroy(other.gameObject);
             Destroy(gameObject);
+            effectManager.FireEnemyDeadByPlayerBeamEffect();
         }
     }
 }

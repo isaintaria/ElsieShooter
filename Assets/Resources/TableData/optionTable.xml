@@ -17,7 +17,7 @@
   <Explosion_Bomb>
     <vibration>1</vibration>
     <bulb>1</bulb>
-    <speaker>false</speaker>
+    <speaker>1</speaker>
     <pattern_v>0</pattern_v>
     <pattern_b>0</pattern_b>
   </Explosion_Bomb>
