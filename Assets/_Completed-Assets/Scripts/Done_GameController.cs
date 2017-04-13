@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using Assets._Completed_Assets.Scripts.TableManager.TableItems;
+using System.IO;
 
 public class Done_GameController : MonoBehaviour
 {
@@ -30,6 +33,8 @@ public class Done_GameController : MonoBehaviour
     public GUIText bombMaxText;
     public GUIText finalScoreText;
     public GUIText currentBombText;
+
+    
     
 
     public int bombMaxCount;
@@ -49,19 +54,17 @@ public class Done_GameController : MonoBehaviour
     private int time;
 
     public static bool EnabledVisualMode = false;
-    public static bool EnabledSoundMode = false;
     public static bool EnabledHapticMode = false;
     public static bool Enabled3DMode = false;
-
+    public static string UserId = "No Input";
     public GameObject Camera2D;
     public GameObject Camera3D;
-
-
     TutorialInfo infoMenu;
        
     public void SetOption()
     {
         SetCameraMode(Enabled3DMode);
+       
     }
 
     public void SetCameraMode(bool mode)
@@ -126,7 +129,7 @@ public class Done_GameController : MonoBehaviour
         SetOption();
         timeOver = true;
         startWait = 1;
-        levelTable = TableManager.LoadTable<LevelTable>("LevelTable");        
+        levelTable = TableManager.Load<LevelTable>("LevelTable");        
         time = playTime;
         isPlayerDead = false;        
 		gameOver = false;
@@ -184,7 +187,24 @@ public class Done_GameController : MonoBehaviour
         finalScoreText.text = score + " 점";
         gameOverText.text = "GAME CLEAR \n연구원을 호출 해 주세요";
         timeOver = true;
+
+        InputUserData();
         
+    }
+
+    private void InputUserData()
+    {
+
+        //Debug.Log("쓰고 있음");
+        var table = TableManager.Load<UserTable>("userTable");
+        var property = new UserProperty();
+        property.Score = score;
+        property.Id = UserId;
+        property.Is3DMode = Enabled3DMode;
+        property.IsHapticEffectOn = EnabledHapticMode;
+        property.IsVisualEffectOn = EnabledVisualMode;
+        table.s_datas.Add(property);
+        TableManager.Save<UserTable>("userTable", table);
     }
 
     void Update ()

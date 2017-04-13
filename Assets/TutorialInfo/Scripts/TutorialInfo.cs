@@ -11,8 +11,11 @@ public class TutorialInfo : MonoBehaviour
     public Toggle toggleVisualOff;
     public Toggle toggleHapticOn;
     public Toggle toggleHapticOff;
-    public Toggle toggleSoundOn;
-    public Toggle toggleSoundOff;
+
+    public InputField idInput;
+
+    public Text ErrorMessage;
+    public GameObject ErrorWindow;   
 
     Done_GameController gameController;
 
@@ -26,7 +29,6 @@ public class TutorialInfo : MonoBehaviour
 	public GameObject overlay;
 
 	// store a reference to the UI toggle which allows users to switch it off for future plays
-	public Toggle showAtStartToggle;
 
 	// string to store Prefs Key with name of preference for showing the overlay info
 	public static string showAtStartPrefsKey = "showLaunchScreen";
@@ -42,8 +44,6 @@ public class TutorialInfo : MonoBehaviour
         toggle2D.isOn = true;
         
 
-        toggleSoundOn.isOn = false;
-        toggleSoundOff.isOn = true;
 
         toggleHapticOn.isOn = false;
         toggleHapticOff.isOn = true;
@@ -66,23 +66,7 @@ public class TutorialInfo : MonoBehaviour
         
         // Check player prefs for show at start preference
         overlay.SetActive(true);
-        if (PlayerPrefs.HasKey(showAtStartPrefsKey))
-		{
-			showAtStart = PlayerPrefs.GetInt(showAtStartPrefsKey) == 1;
-		}
-
-		// set UI toggle to match the existing UI preference
-		showAtStartToggle.isOn = showAtStart;
-
-		// show the overlay info or continue to play the game
-		if (showAtStart) 
-		{
-			ShowLaunchScreen();
-		}
-		else 
-		{
-			StartGame ();
-		}
+        ShowLaunchScreen();
 
 	}
 
@@ -115,15 +99,20 @@ public class TutorialInfo : MonoBehaviour
     private void SetData()
     {
         Done_GameController.EnabledHapticMode = toggleHapticOn.isOn;
-        Done_GameController.EnabledSoundMode = toggleSoundOn.isOn;
         Done_GameController.EnabledVisualMode = toggleVisualOn.isOn;
+        Done_GameController.Enabled3DMode = toggle3D.isOn;
+        Done_GameController.UserId = idInput.text;
+
         gameController.SetCameraMode(toggle3D.isOn );
     }
 
     // set the boolean storing show at start status to equal the UI toggle's status
-    public void ToggleShowAtLaunch()
-	{
-		showAtStart = showAtStartToggle.isOn;
-		PlayerPrefs.SetInt(showAtStartPrefsKey, showAtStart ? 1 : 0);
-	}
+
+
+    internal void ShowErrorMessage(string message)
+    {
+        ErrorWindow.SetActive(true);
+        ErrorMessage.text = message;
+                       
+    }
 }   

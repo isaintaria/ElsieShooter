@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PortTable xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Bulb_Port>
+    <PORT>COM3</PORT>
+  </Bulb_Port>
+  <Vibe_Port>
+    <PORT>COM4</PORT>
+  </Vibe_Port>
+</PortTable>
