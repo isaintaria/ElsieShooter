@@ -57,6 +57,7 @@ public class TutorialInfo : MonoBehaviour
     private void Start()
     {
         gameController = GameObject.Find("Game Controller").GetComponent<Done_GameController>();
+       
     }
 
     void Awake()
@@ -104,6 +105,19 @@ public class TutorialInfo : MonoBehaviour
         Done_GameController.UserId = idInput.text;
 
         gameController.SetCameraMode(toggle3D.isOn );
+
+        if (toggle3D.isOn)
+        {
+            GameObject.Find("Earth").SetActive(true);
+            GameObject.Find("Star").SetActive(true);
+
+        }
+        else
+        {
+            GameObject.Find("Earth").SetActive(false);
+            GameObject.Find("Star").SetActive(false);
+
+        }
     }
 
     // set the boolean storing show at start status to equal the UI toggle's status
